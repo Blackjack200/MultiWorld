@@ -7,12 +7,7 @@ namespace czechpmdevs\multiworld\command\subcommand;
 use czechpmdevs\multiworld\form\SimpleForm;
 use pocketmine\command\CommandSender;
 
-/**
- * Class ManageSubcommand
- * @package czechpmdevs\multiworld\command\subcommand
- */
 class ManageSubcommand implements SubCommand {
-	
 	public function executeSub(CommandSender $sender, array $args, string $name) {
 		if (!$sender instanceof Player) {
 			$sender->sendMessage("§cThis command can be used only in-game!");

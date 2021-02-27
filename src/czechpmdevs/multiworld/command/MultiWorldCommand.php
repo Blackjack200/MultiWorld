@@ -48,16 +48,11 @@ use pocketmine\Server;
  * @package czechpmdevs\multiworld\Command
  */
 class MultiWorldCommand extends Command implements PluginIdentifiableCommand {
-	
-	/** @var  MultiWorld $plugin */
-	public $plugin;
+	public MultiWorld $plugin;
 	
 	/** @var SubCommand[] $subcommands */
-	public $subcommands = [];
+	public array $subcommands = [];
 	
-	/**
-	 * MultiWorldCommand constructor.
-	 */
 	public function __construct() {
 		parent::__construct("multiworld", "MultiWorld commands", null, ["mw"]);
 		$this->plugin = MultiWorld::getInstance();
@@ -79,13 +74,6 @@ class MultiWorldCommand extends Command implements PluginIdentifiableCommand {
 		$this->subcommands["rename"] = new RenameSubcommand;
 	}
 	
-	/**
-	 * @param CommandSender $sender
-	 * @param string $commandLabel
-	 * @param array $args
-	 *
-	 * @return mixed|void
-	 */
 	public function execute(CommandSender $sender, string $commandLabel, array $args) {
 		if (!isset($args[0])) {
 			if ($sender->hasPermission("mw.cmd")) {
@@ -111,17 +99,11 @@ class MultiWorldCommand extends Command implements PluginIdentifiableCommand {
 		
 		array_shift($args);
 		
-		/** @var SubCommand $subCommand */
 		$subCommand = $this->subcommands[$this->getSubcommand($name)];
 		$subCommand->executeSub($sender, $args, $this->getSubcommand($name));
 	}
 	
-	/**
-	 * @param string $name
-	 *
-	 * @return string|null $name
-	 */
-	public function getSubcommand(string $name) {
+	public function getSubcommand(string $name) : ?string {
 		switch ($name) {
 			case "help":
 			case "?":
@@ -172,11 +154,6 @@ class MultiWorldCommand extends Command implements PluginIdentifiableCommand {
 		return null;
 	}
 	
-	/**
-	 * @param CommandSender $sender
-	 * @param string $command
-	 * @return bool
-	 */
 	public function checkPerms(CommandSender $sender, string $command) : bool {
 		if ($sender instanceof Player) {
 			if (!$sender->hasPermission("mw.cmd." . $this->getSubcommand($command))) {
@@ -190,17 +167,10 @@ class MultiWorldCommand extends Command implements PluginIdentifiableCommand {
 		}
 	}
 	
-	
-	/**
-	 * @return Server
-	 */
 	public function getServer() : Server {
 		return Server::getInstance();
 	}
 	
-	/**
-	 * @return Plugin|MultiWorld $multiWorld
-	 */
 	public function getPlugin() : Plugin {
 		return MultiWorld::getInstance();
 	}

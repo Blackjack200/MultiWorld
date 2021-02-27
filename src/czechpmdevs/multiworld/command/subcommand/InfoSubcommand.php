@@ -27,18 +27,7 @@ use czechpmdevs\multiworld\util\LanguageManager;
 use pocketmine\command\CommandSender;
 use pocketmine\level\Level;
 
-/**
- * Class InfoSubcommand
- * @package czechpmdevs\multiworld\command\subcommand
- */
 class InfoSubcommand implements SubCommand {
-	
-	/**
-	 * @param CommandSender $sender
-	 * @param array $args
-	 * @param string $name
-	 * @return mixed|void
-	 */
 	public function executeSub(CommandSender $sender, array $args, string $name) {
 		if (!$sender instanceof Player) {
 			$sender->sendMessage("§cThis command can be used only in-game!");
@@ -58,11 +47,6 @@ class InfoSubcommand implements SubCommand {
 		$sender->sendMessage($this->getInfoMsg($sender, $sender->getLevel()));
 	}
 	
-	/**
-	 * @param CommandSender $sender
-	 * @param Level $level
-	 * @return string
-	 */
 	public function getInfoMsg(CommandSender $sender, Level $level) : string {
 		$name = $level->getName();
 		$folderName = $level->getFolderName();

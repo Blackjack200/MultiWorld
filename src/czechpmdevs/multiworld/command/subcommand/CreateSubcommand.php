@@ -27,18 +27,7 @@ use czechpmdevs\multiworld\MultiWorld;
 use czechpmdevs\multiworld\util\LanguageManager;
 use pocketmine\command\CommandSender;
 
-/**
- * Class CreateSubcommand
- * @package czechpmdevs\multiworld\command\subcommand
- */
 class CreateSubcommand implements SubCommand {
-	
-	/**
-	 * @param CommandSender $sender
-	 * @param array $args
-	 * @param string $name
-	 * @return mixed|void
-	 */
 	public function executeSub(CommandSender $sender, array $args, string $name) {
 		if (!isset($args[0])) {
 			$sender->sendMessage(LanguageManager::getMsg($sender, "create-usage"));

@@ -28,19 +28,7 @@ use czechpmdevs\multiworld\MultiWorld;
 use czechpmdevs\multiworld\util\LanguageManager;
 use pocketmine\command\CommandSender;
 
-/**
- * Class GameruleSubcommand
- * @package czechpmdevs\multiworld\command\subcommand
- */
 class GameruleSubcommand implements SubCommand {
-	
-	/**
-	 * @param CommandSender $sender
-	 * @param array $args
-	 * @param string $name
-	 *
-	 * @return mixed|void
-	 */
 	public function executeSub(CommandSender $sender, array $args, string $name) {
 		if (!isset($args[0])) {
 			$sender->sendMessage(LanguageManager::getMsg($sender, "gamerule-usage"));

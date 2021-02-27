@@ -27,18 +27,7 @@ use czechpmdevs\multiworld\util\LanguageManager;
 use pocketmine\command\CommandSender;
 use pocketmine\Server;
 
-/**
- * Class ListSubcommand
- * @package czechpmdevs\multiworld\command\subcommand
- */
 class ListSubcommand implements SubCommand {
-	
-	/**
-	 * @param CommandSender $sender
-	 * @param array $args
-	 * @param string $name
-	 * @return mixed|void
-	 */
 	public function executeSub(CommandSender $sender, array $args, string $name) {
 		$levels = [];
 		
@@ -64,9 +53,6 @@ class ListSubcommand implements SubCommand {
 		}
 	}
 	
-	/**
-	 * @return Server $server
-	 */
 	private function getServer() : Server {
 		return Server::getInstance();
 	}

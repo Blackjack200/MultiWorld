@@ -30,18 +30,7 @@ use pocketmine\level\Position;
 use pocketmine\math\Vector3;
 use pocketmine\Server;
 
-/**
- * Class UpdateSubcommand
- * @package czechpmdevs\multiworld\command\subcommand
- */
 class UpdateSubcommand implements SubCommand {
-	
-	/**
-	 * @param CommandSender $sender
-	 * @param array $args
-	 * @param string $name
-	 * @return mixed|void
-	 */
 	public function executeSub(CommandSender $sender, array $args, string $name) {
 		if (!isset($args[0])) {
 			$sender->sendMessage(LanguageManager::getMsg($sender, "update-usage"));
@@ -103,32 +92,19 @@ class UpdateSubcommand implements SubCommand {
 		}
 	}
 	
-	/**
-	 * @param Level $level
-	 * @param Vector3 $vector3
-	 */
 	public function setSpawn(Level $level, Vector3 $vector3) {
 		$level->setSpawnLocation($vector3);
 	}
 	
-	/**
-	 * @return Server $server
-	 */
 	private function getServer() : Server {
 		return Server::getInstance();
 	}
 	
-	/**
-	 * @param Position $position
-	 */
 	public function setLobby(Position $position) {
 		$this->setDefaultLevel($position->getLevel());
 		$position->getLevel()->setSpawnLocation($position->asVector3());
 	}
 	
-	/**
-	 * @param Level $level
-	 */
 	public function setDefaultLevel(Level $level) {
 		$this->getServer()->setDefaultLevel($level);
 	}

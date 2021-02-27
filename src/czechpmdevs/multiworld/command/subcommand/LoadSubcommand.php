@@ -27,18 +27,7 @@ use czechpmdevs\multiworld\util\LanguageManager;
 use pocketmine\command\CommandSender;
 use pocketmine\Server;
 
-/**
- * Class LoadSubcommand
- * @package czechpmdevs\multiworld\command\subcommand
- */
 class LoadSubcommand implements SubCommand {
-	
-	/**
-	 * @param CommandSender $sender
-	 * @param array $args
-	 * @param string $name
-	 * @return mixed|void
-	 */
 	public function executeSub(CommandSender $sender, array $args, string $name) {
 		if (!isset($args[0])) {
 			$sender->sendMessage(LanguageManager::getMsg($sender, "load-usage"));
@@ -60,9 +49,6 @@ class LoadSubcommand implements SubCommand {
 		return;
 	}
 	
-	/**
-	 * @return Server $server
-	 */
 	private function getServer() : Server {
 		return Server::getInstance();
 	}

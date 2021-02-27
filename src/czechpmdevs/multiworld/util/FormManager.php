@@ -9,13 +9,9 @@ use czechpmdevs\multiworld\api\WorldManagementAPI;
 use czechpmdevs\multiworld\form\CustomForm;
 use czechpmdevs\multiworld\MultiWorld;
 use pocketmine\form\Form;
+use pocketmine\player\Player;
 
-/**
- * Class FormManager
- * @package czechpmdevs\multiworld\util
- */
 class FormManager {
-	
 	public const FORM_CREATE = 0;
 	public const FORM_DELETE = 1;
 	public const FORM_GAMERULES = 2;
@@ -36,11 +32,6 @@ class FormManager {
 		$this->plugin = $plugin;
 	}
 	
-	/**
-	 * @param Player $player
-	 * @param mixed $data
-	 * @param Form $form
-	 */
 	public function handleFormResponse(Player $player, $data, Form $form) {
 		if ($data === null) return;
 		$customForm = new CustomForm("World Manager");
@@ -102,12 +93,7 @@ class FormManager {
 		}
 	}
 	
-	/**
-	 * @param Player $player
-	 * @param mixed $data
-	 * @param CustomForm $form
-	 */
-	public function handleCustomFormResponse(Player $player, $data, CustomForm $form) {
+	public function handleCustomFormResponse(Player $player, $data, CustomForm $form) : void {
 		if ($data === null) return;
 		switch ($form->mwId) {
 			case self::FORM_CREATE:

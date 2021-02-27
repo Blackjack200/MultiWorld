@@ -24,24 +24,12 @@ namespace czechpmdevs\multiworld\util;
 
 use czechpmdevs\multiworld\MultiWorld;
 
-/**
- * Class ConfigManager
- * @package multiworld\Util
- */
 class ConfigManager {
-	
-	public static $prefix;
+	public static string $prefix;
 	
 	// prefix
-	/** @var  MultiWorld */
-	public $plugin;
-	/** @var  array $configData */
-	public $configData;
+	public MultiWorld $plugin;
 	
-	/**
-	 * ConfigManager constructor.
-	 * @param MultiWorld $plugin
-	 */
 	public function __construct(MultiWorld $plugin) {
 		$this->plugin = $plugin;
 		$this->checkConfigUpdates();
@@ -74,17 +62,11 @@ class ConfigManager {
 		}
 	}
 	
-	/**
-	 * @return string
-	 */
-	public static function getDataFolder() {
+	public static function getDataFolder() : string {
 		return MultiWorld::getInstance()->getDataFolder();
 	}
 	
-	/**
-	 * @return void
-	 */
-	public function initConfig() {
+	public function initConfig() : void {
 		if (!is_dir(self::getDataFolder())) {
 			@mkdir(self::getDataFolder());
 		}
@@ -120,16 +102,10 @@ class ConfigManager {
 		self::$prefix = MultiWorld::getInstance()->getConfig()->get("prefix") . " §a";
 	}
 	
-	/**
-	 * @return string
-	 */
-	public static function getDataPath() {
+	public static function getDataPath() : string {
 		return MultiWorld::getInstance()->getServer()->getDataPath();
 	}
 	
-	/**
-	 * @return string $prefix
-	 */
 	public static function getPrefix() : string {
 		return is_string(self::$prefix) ? self::$prefix : "[MultiWorld]";
 	}

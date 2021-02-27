@@ -25,19 +25,7 @@ namespace czechpmdevs\multiworld\command\subcommand;
 use czechpmdevs\multiworld\util\LanguageManager;
 use pocketmine\command\CommandSender;
 
-/**
- * Class HelpSubcommand
- * @package czechpmdevs\multiworld\command\subcommand
- */
 class HelpSubcommand implements SubCommand {
-	
-	/**
-	 * @param CommandSender $sender
-	 * @param array $args
-	 * @param string $name
-	 *
-	 * @return mixed|void
-	 */
 	public function executeSub(CommandSender $sender, array $args, string $name) {
 		if (!isset($args[0])) {
 			$sender->sendMessage($this->getHelpPage($sender, 1));
@@ -52,12 +40,6 @@ class HelpSubcommand implements SubCommand {
 		$sender->sendMessage($this->getHelpPage($sender, (int) $args[0]));
 	}
 	
-	/**
-	 * @param CommandSender $sender
-	 * @param int $page
-	 *
-	 * @return string
-	 */
 	public function getHelpPage(CommandSender $sender, int $page) : string {
 		$title = LanguageManager::getMsg($sender, "help", [$page, "2"]);
 		

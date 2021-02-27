@@ -25,20 +25,7 @@ namespace czechpmdevs\multiworld\api;
 
 use Generator;
 
-/**
- * Class FileBrowsingApi
- * @package czechpmdevs\multiworld\api
- */
 class FileBrowsingApi {
-	
-	/**
-	 * @param string $dir
-	 * @return array
-	 * @api
-	 *
-	 * Returns all subdirectories in the path
-	 *
-	 */
 	public static function getAllSubdirectories(string $dir) : array {
 		$scanDirectory = function (string $dir) : Generator {
 			foreach (glob($dir . "/*") as $subDir) {
@@ -70,17 +57,6 @@ class FileBrowsingApi {
 		return $all;
 	}
 	
-	/**
-	 * @param string $sourceFile
-	 * @param string $targetFile
-	 * @param bool $rewrite
-	 *
-	 * @return bool $isChanged
-	 * @api
-	 *
-	 * Saves resources with subdirectories
-	 *
-	 */
 	public static function saveResource(string $sourceFile, string $targetFile, bool $rewrite = false) : bool {
 		if (file_exists($targetFile)) {
 			if ($rewrite) {
@@ -105,20 +81,6 @@ class FileBrowsingApi {
 		return true;
 	}
 	
-	
-	/**
-	 * @param string $path
-	 * @param string $root
-	 *
-	 * @return string
-	 * @api
-	 *
-	 * Example:
-	 * $path = 'D:\JetBrains\PhpstormProjects\ProjectCzechPMDevs\plugins\MultiWorld/resources/structures/village/snowy/houses';
-	 * $root = 'resources'
-	 * -> '/structures/village/snowy/houses'
-	 *
-	 */
 	public static function removePathFromRoot(string $path, string $root) : string {
 		$position = strpos($path, $root);
 		if ($position === false) {

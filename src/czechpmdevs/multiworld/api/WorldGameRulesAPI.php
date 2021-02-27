@@ -26,21 +26,10 @@ use pocketmine\level\format\io\BaseLevelProvider;
 use pocketmine\level\Level;
 use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\network\mcpe\protocol\GameRulesChangedPacket;
+use pocketmine\player\Player;
 
 
-/**
- * Class WorldGameRulesAPI
- * @package czechpmdevs\multiworld\api
- */
 class WorldGameRulesAPI {
-	
-	
-	/**
-	 * @param Level $level
-	 * @param array $gameRules
-	 *
-	 * @return bool
-	 */
 	public static function setLevelGameRules(Level $level, array $gameRules) : bool {
 		$levelProvider = $level->getProvider();
 		if (!$levelProvider instanceof BaseLevelProvider) {
@@ -58,11 +47,6 @@ class WorldGameRulesAPI {
 		return true;
 	}
 	
-	/**
-	 * @param bool|int|string $value
-	 *
-	 * @return string
-	 */
 	private static function getStringFromValue($value) : string {
 		if (is_bool($value)) {
 			return $value ? "true" : "false";
@@ -85,13 +69,6 @@ class WorldGameRulesAPI {
 		}
 	}
 	
-	/**
-	 * @param Level $level
-	 * @param string $gameRule
-	 * @param bool $value
-	 *
-	 * @return bool
-	 */
 	public static function updateLevelGameRule(Level $level, string $gameRule, bool $value) : bool {
 		$levelProvider = $level->getProvider();
 		if (!$levelProvider instanceof BaseLevelProvider) {
@@ -107,19 +84,12 @@ class WorldGameRulesAPI {
 		return true;
 	}
 	
-	/**
-	 * @param Level $level
-	 */
 	public static function reloadGameRules(Level $level) {
 		foreach ($level->getPlayers() as $player) {
 			self::updateGameRules($player);
 		}
 	}
 	
-	/**
-	 * @param Player $player
-	 * @param Level|null $level
-	 */
 	public static function updateGameRules(Player $player, ?Level $level = null) {
 		if ($level === null) $level = $player->getLevel();
 		$pk = new GameRulesChangedPacket();
@@ -127,11 +97,6 @@ class WorldGameRulesAPI {
 		$player->dataPacket($pk);
 	}
 	
-	/**
-	 * @param Level $level
-	 *
-	 * @return array
-	 */
 	public static function getLevelGameRules(Level $level) : array {
 		$levelProvider = $level->getProvider();
 		if (!$levelProvider instanceof BaseLevelProvider) {
@@ -166,9 +131,6 @@ class WorldGameRulesAPI {
 		return $gameRules;
 	}
 	
-	/**
-	 * @return array $gameRules
-	 */
 	public static function getDefaultGameRules() : array {
 		return [
 			//"commandBlockOutput" => [1, true], not implemented
@@ -191,16 +153,11 @@ class WorldGameRulesAPI {
 		];
 	}
 	
-	/**
-	 * @return array
-	 */
 	public static function getAllGameRules() : array {
 		return array_keys(self::getDefaultGameRules());
 	}
 	
 	/**
-	 * @param string $string
-	 *
 	 * @return bool|int|string
 	 */
 	private static function getValueFromString(string $string) {
@@ -218,11 +175,6 @@ class WorldGameRulesAPI {
 		}
 	}
 	
-	/**
-	 * @param string $lowerString
-	 *
-	 * @return string
-	 */
 	public static function getRuleFromLowerString(string $lowerString) : string {
 		$rules = [];
 		foreach (self::getAllGameRules() as $rule) {

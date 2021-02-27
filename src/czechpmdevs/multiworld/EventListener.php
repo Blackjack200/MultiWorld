@@ -44,52 +44,27 @@ use pocketmine\level\Level;
 use pocketmine\network\mcpe\protocol\ChangeDimensionPacket;
 use pocketmine\network\mcpe\protocol\LoginPacket;
 
-/**
- * Class EventListener
- * @package multiworld
- */
 class EventListener implements Listener {
+	public MultiWorld $plugin;
 	
-	/** @var MultiWorld $plugin */
-	public $plugin;
-	
-	/** @var MultiWorldCommand $cmd */
-	private $mwCommand;
+	private MultiWorldCommand $mwCommand;
 	
 	/** @var Item[][][] $inventories */
-	private $inventories = [];
+	private array $inventories = [];
 	
-	/** @var array $deathLevels */
-	private $deathLevels = [];
-	
-	/**
-	 * EventListener constructor.
-	 *
-	 * @param MultiWorld $plugin
-	 * @param MultiWorldCommand $mwCommand
-	 */
 	public function __construct(MultiWorld $plugin, MultiWorldCommand $mwCommand) {
 		$this->plugin = $plugin;
 		$this->mwCommand = $mwCommand;
 	}
 	
-	/**
-	 * @param PlayerJoinEvent $event
-	 */
 	public function onJoin(PlayerJoinEvent $event) {
 		WorldGameRulesAPI::updateGameRules($event->getPlayer());
 	}
 	
-	/**
-	 * @param LevelLoadEvent $event
-	 */
 	public function onLevelLoad(LevelLoadEvent $event) {
 		WorldGameRulesAPI::handleGameRuleChange($event->getLevel(), WorldGameRulesAPI::getLevelGameRules($event->getLevel()));
 	}
 	
-	/**
-	 * @param EntityLevelChangeEvent $event
-	 */
 	public function onLevelChange(EntityLevelChangeEvent $event) {
 		$entity = $event->getEntity();
 		if ($entity instanceof Player) {
@@ -123,9 +98,6 @@ class EventListener implements Listener {
 		}
 	}
 	
-	/**
-	 * @param EntityDeathEvent $event
-	 */
 	public function onEntityDeath(EntityDeathEvent $event) {
 		$entity = $event->getEntity();
 		$levelGameRules = WorldGameRulesAPI::getLevelGameRules($entity->getLevel());
@@ -134,9 +106,6 @@ class EventListener implements Listener {
 		}
 	}
 	
-	/**
-	 * @param PlayerDeathEvent $event
-	 */
 	public function onPlayerDeath(PlayerDeathEvent $event) {
 		$player = $event->getPlayer();
 		
@@ -167,9 +136,6 @@ class EventListener implements Listener {
 		}
 	}
 	
-	/**
-	 * @param PlayerRespawnEvent $event
-	 */
 	public function onPlayerRespawn(PlayerRespawnEvent $event) {
 		$player = $event->getPlayer();
 		$levelGameRules = WorldGameRulesAPI::getLevelGameRules($player->getLevel());
@@ -180,9 +146,6 @@ class EventListener implements Listener {
 		}
 	}
 	
-	/**
-	 * @param BlockBreakEvent $event
-	 */
 	public function onBreak(BlockBreakEvent $event) {
 		$player = $event->getPlayer();
 		$levelGameRules = WorldGameRulesAPI::getLevelGameRules($player->getLevel());
@@ -191,9 +154,6 @@ class EventListener implements Listener {
 		}
 	}
 	
-	/**
-	 * @param EntityRegainHealthEvent $event
-	 */
 	public function onRegenerate(EntityRegainHealthEvent $event) {
 		$entity = $event->getEntity();
 		if (!$entity instanceof Living) return;
@@ -205,9 +165,6 @@ class EventListener implements Listener {
 		}
 	}
 	
-	/**
-	 * @param EntityDamageEvent $event
-	 */
 	public function onDamage(EntityDamageEvent $event) {
 		$entity = $event->getEntity();
 		
@@ -221,9 +178,6 @@ class EventListener implements Listener {
 		}
 	}
 	
-	/**
-	 * @param EntityExplodeEvent $event
-	 */
 	public function onExplode(EntityExplodeEvent $event) {
 		$entity = $event->getEntity();
 		
@@ -233,10 +187,6 @@ class EventListener implements Listener {
 		}
 	}
 	
-	
-	/**
-	 * @param DataPacketReceiveEvent $event
-	 */
 	public function onDataPacketReceive(DataPacketReceiveEvent $event) {
 		$packet = $event->getPacket();
 		if ($packet instanceof LoginPacket) {

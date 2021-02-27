@@ -26,56 +26,30 @@ use czechpmdevs\multiworld\api\FileBrowsingApi;
 use czechpmdevs\multiworld\api\WorldManagementAPI;
 use czechpmdevs\multiworld\command\GameruleCommand;
 use czechpmdevs\multiworld\command\MultiWorldCommand;
-use czechpmdevs\multiworld\generator\ender\EnderGenerator;
-use czechpmdevs\multiworld\generator\nether\NetherGenerator;
-use czechpmdevs\multiworld\generator\normal\NormalGenerator;
-use czechpmdevs\multiworld\generator\skyblock\SkyBlockGenerator;
 use czechpmdevs\multiworld\generator\void\VoidGenerator;
-use czechpmdevs\multiworld\structure\StructureManager;
 use czechpmdevs\multiworld\util\ConfigManager;
 use czechpmdevs\multiworld\util\FormManager;
 use czechpmdevs\multiworld\util\LanguageManager;
 use pocketmine\command\Command;
 use pocketmine\level\generator\GeneratorManager;
-use pocketmine\nbt\BigEndianNBTStream;
-use pocketmine\nbt\NetworkLittleEndianNBTStream;
-use pocketmine\nbt\tag\CompoundTag;
-use pocketmine\network\mcpe\protocol\types\RuntimeBlockMapping;
 use pocketmine\plugin\PluginBase;
-use ReflectionException;
-use const pocketmine\RESOURCE_PATH;
 
-/**
- * Class MultiWorld
- * @package multiworld
- */
 class MultiWorld extends PluginBase {
+	private static MultiWorld $instance;
 	
-	/** @var  MultiWorld $instance */
-	private static $instance;
+	public LanguageManager $languageManager;
 	
-	/** @var LanguageManager $languageManager */
-	public $languageManager;
+	public ConfigManager $configManager;
 	
-	/** @var ConfigManager $configManager */
-	public $configManager;
-	
-	/** @var FormManager $formManager */
-	public $formManager;
+	public FormManager $formManager;
 	
 	/** @var Command[] $commands */
-	public $commands = [];
+	public array $commands = [];
 	
-	/**
-	 * @return MultiWorld $plugin
-	 */
 	public static function getInstance() : MultiWorld {
 		return self::$instance;
 	}
 	
-	/**
-	 * @return string $prefix
-	 */
 	public static function getPrefix() : string {
 		return ConfigManager::getPrefix();
 	}
@@ -86,24 +60,15 @@ class MultiWorld extends PluginBase {
 		
 		if ($start) {
 			$generators = [
-				"ender" => EnderGenerator::class,
 				"void" => VoidGenerator::class,
-				"skyblock" => SkyBlockGenerator::class,
-				"nether" => NetherGenerator::class,
-				"normal_mw" => NormalGenerator::class
 			];
 			
 			foreach ($generators as $name => $class) {
 				GeneratorManager::addGenerator($class, $name, true);
 			}
-			
-			StructureManager::saveResources($this->getResources());
 		}
 	}
 	
-	/**
-	 * @throws ReflectionException
-	 */
 	public function onEnable() {
 		$this->configManager = new ConfigManager($this);
 		$this->languageManager = new LanguageManager($this);
@@ -119,17 +84,7 @@ class MultiWorld extends PluginBase {
 		}
 		
 		$this->getServer()->getPluginManager()->registerEvents(new EventListener($this, $cmd), $this);
-		$this->buildBlockIdTable();
 		$this->test();
-	}
-	
-	public function buildBlockIdTable() {
-		$stream = new NetworkLittleEndianNBTStream();
-		$values = $stream->read(file_get_contents(RESOURCE_PATH . "/vanilla/required_block_states.nbt"));
-		
-		$outputStream = new BigEndianNBTStream();
-		$compound = new CompoundTag("Data", [$values]);
-		file_put_contents("states.dat", $outputStream->write($compound));
 	}
 	
 	private function test() {

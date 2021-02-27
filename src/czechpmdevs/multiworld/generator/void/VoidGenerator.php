@@ -28,59 +28,30 @@ use pocketmine\level\generator\Generator;
 use pocketmine\math\Vector3;
 use pocketmine\utils\Random;
 
-/**
- * Class VoidGenerator
- * @package czechpmdevs\multiworld\generator\void
- */
 class VoidGenerator extends Generator {
+	protected ChunkManager $level;
 	
-	/** @var ChunkManager $level */
-	protected $level;
+	protected Random $random;
 	
-	/** @var Random $random */
-	protected $random;
+	private array $options;
 	
-	/** @var array $options */
-	private $options;
-	
-	/**
-	 * VoidGenerator constructor.
-	 *
-	 * @param array $settings
-	 */
 	public function __construct(array $settings = []) {
 		$this->options = $settings;
 	}
 	
-	/**
-	 * @return array
-	 */
 	public function getSettings() : array {
 		return [];
 	}
 	
-	/**
-	 * @return string
-	 */
 	public function getName() : string {
 		return "void";
 	}
 	
-	/**
-	 * @param ChunkManager $level
-	 * @param Random $random
-	 *
-	 * @return mixed|void
-	 */
 	public function init(ChunkManager $level, Random $random) : void {
 		$this->level = $level;
 		$this->random = $random;
 	}
 	
-	/**
-	 * @param int $chunkX
-	 * @param int $chunkZ
-	 */
 	public function generateChunk(int $chunkX, int $chunkZ) : void {
 		$chunk = $this->level->getChunk($chunkX, $chunkZ);
 		for ($x = 0; $x < 16; ++$x) {
@@ -98,19 +69,10 @@ class VoidGenerator extends Generator {
 		$chunk->setGenerated(true);
 	}
 	
-	/**
-	 * @return Vector3
-	 */
 	public function getSpawn() : Vector3 {
 		return new Vector3(256, 65, 256);
 	}
 	
-	/**
-	 * @param $chunkX
-	 * @param $chunkZ
-	 *
-	 * @return mixed|void
-	 */
 	public function populateChunk(int $chunkX, int $chunkZ) : void {
 	}
 }
