@@ -31,11 +31,11 @@ use czechpmdevs\multiworld\util\ConfigManager;
 use czechpmdevs\multiworld\util\FormManager;
 use czechpmdevs\multiworld\util\LanguageManager;
 use pocketmine\command\Command;
-use pocketmine\level\generator\GeneratorManager;
 use pocketmine\plugin\PluginBase;
+use pocketmine\world\generator\GeneratorManager;
 
 class MultiWorld extends PluginBase {
-	private static MultiWorld $instance;
+	private static ?MultiWorld $instance = null;
 	
 	public LanguageManager $languageManager;
 	
@@ -54,7 +54,7 @@ class MultiWorld extends PluginBase {
 		return ConfigManager::getPrefix();
 	}
 	
-	public function onLoad() {
+	public function onLoad() : void {
 		$start = (bool) !(self::$instance instanceof $this);
 		self::$instance = $this;
 		
@@ -64,19 +64,18 @@ class MultiWorld extends PluginBase {
 			];
 			
 			foreach ($generators as $name => $class) {
-				GeneratorManager::addGenerator($class, $name, true);
+				GeneratorManager::getInstance()->addGenerator($class, $name, true);
 			}
 		}
 	}
 	
-	public function onEnable() {
+	public function onEnable() : void {
 		$this->configManager = new ConfigManager($this);
 		$this->languageManager = new LanguageManager($this);
 		$this->formManager = new FormManager($this);
 		
 		$this->commands = [
-			"multiworld" => $cmd = new MultiWorldCommand(),
-			"gamerule" => new GameruleCommand()
+			"multiworld" => $cmd = new MultiWorldCommand()
 		];
 		
 		foreach ($this->commands as $command) {

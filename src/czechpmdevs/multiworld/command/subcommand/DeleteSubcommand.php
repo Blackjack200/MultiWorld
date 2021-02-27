@@ -36,14 +36,14 @@ class DeleteSubcommand implements SubCommand {
 			return;
 		}
 		
-		if (!$this->getServer()->isLevelGenerated($args[0]) || !file_exists($this->getServer()->getDataPath() . "worlds/{$args[0]}")) {
+		if (!$this->getServer()->getWorldManager()->isWorldGenerated($args[0]) || !file_exists($this->getServer()->getDataPath() . "worlds/{$args[0]}")) {
 			$sender->sendMessage(MultiWorld::getPrefix() . str_replace("%1", $args[0], LanguageManager::getMsg($sender, "delete-levelnotexists")));
 			return;
 		}
 		
-		if (!$this->getServer()->isLevelLoaded($args[0])) $this->getServer()->loadLevel($args[0]);
+		if (!$this->getServer()->getWorldManager()->isWorldLoaded($args[0])) $this->getServer()->getWorldManager()->loadWorld($args[0]);
 		
-		if ($this->getServer()->getDefaultLevel()->getFolderName() == $this->getServer()->getLevelByName($args[0])->getFolderName()) {
+		if ($this->getServer()->getWorldManager()->getDefaultWorld()->getFolderName() == $this->getServer()->getWorldManager()->getWorldByName($args[0])->getFolderName()) {
 			$sender->sendMessage("§cCould not remove default level!");
 			return;
 		}

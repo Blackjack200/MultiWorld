@@ -24,7 +24,6 @@ namespace czechpmdevs\multiworld\command;
 
 use czechpmdevs\multiworld\command\subcommand\CreateSubcommand;
 use czechpmdevs\multiworld\command\subcommand\DeleteSubcommand;
-use czechpmdevs\multiworld\command\subcommand\GameruleSubcommand;
 use czechpmdevs\multiworld\command\subcommand\HelpSubcommand;
 use czechpmdevs\multiworld\command\subcommand\InfoSubcommand;
 use czechpmdevs\multiworld\command\subcommand\ListSubcommand;
@@ -39,7 +38,7 @@ use czechpmdevs\multiworld\MultiWorld;
 use czechpmdevs\multiworld\util\LanguageManager;
 use pocketmine\command\Command;
 use pocketmine\command\CommandSender;
-use pocketmine\command\PluginIdentifiableCommand;
+use pocketmine\player\Player;
 use pocketmine\plugin\Plugin;
 use pocketmine\Server;
 
@@ -47,7 +46,7 @@ use pocketmine\Server;
  * Class MultiWorldCommand
  * @package czechpmdevs\multiworld\Command
  */
-class MultiWorldCommand extends Command implements PluginIdentifiableCommand {
+class MultiWorldCommand extends Command {
 	public MultiWorld $plugin;
 	
 	/** @var SubCommand[] $subcommands */
@@ -69,7 +68,6 @@ class MultiWorldCommand extends Command implements PluginIdentifiableCommand {
 		$this->subcommands["delete"] = new DeleteSubcommand;
 		$this->subcommands["update"] = new UpdateSubcommand;
 		$this->subcommands["info"] = new InfoSubcommand;
-		$this->subcommands["gamerule"] = new GameruleSubcommand;
 		$this->subcommands["manage"] = new ManageSubcommand;
 		$this->subcommands["rename"] = new RenameSubcommand;
 	}

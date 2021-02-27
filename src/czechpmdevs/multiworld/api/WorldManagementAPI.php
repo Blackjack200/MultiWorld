@@ -22,17 +22,12 @@ declare(strict_types=1);
 
 namespace czechpmdevs\multiworld\api;
 
-use czechpmdevs\multiworld\generator\ender\EnderGenerator;
-use czechpmdevs\multiworld\generator\nether\NetherGenerator;
-use czechpmdevs\multiworld\generator\normal\NormalGenerator;
-use czechpmdevs\multiworld\generator\skyblock\SkyBlockGenerator;
 use czechpmdevs\multiworld\generator\void\VoidGenerator;
-use pocketmine\level\format\io\BaseLevelProvider;
-use pocketmine\level\generator\Flat;
-use pocketmine\level\generator\hell\Nether;
-use pocketmine\level\generator\normal\Normal;
-use pocketmine\level\Level;
 use pocketmine\Server;
+use pocketmine\world\format\io\BaseWorldProvider;
+use pocketmine\world\generator\Flat;
+use pocketmine\world\generator\normal\Normal;
+use pocketmine\world\World;
 
 class WorldManagementAPI {
 	
@@ -54,33 +49,19 @@ class WorldManagementAPI {
 		$generatorClass = Normal::class;
 		
 		switch ($generator) {
-			case self::GENERATOR_HELL:
-				$generatorClass = NetherGenerator::class;
-				break;
-			case self::GENERATOR_ENDER:
-				$generatorClass = EnderGenerator::class;
-				break;
 			case self::GENERATOR_FLAT:
 				$generatorClass = Flat::class;
 				break;
 			case self::GENERATOR_VOID:
 				$generatorClass = VoidGenerator::class;
 				break;
-			case self::GENERATOR_HELL_OLD:
-				$generatorClass = Nether::class;
-				break;
-			case self::GENERATOR_SKYBLOCK:
-				$generatorClass = SkyBlockGenerator::class;
-				break;
-			case self::GENERATOR_NORMAL_CUSTOM:
-				$generatorClass = NormalGenerator::class;
 		}
 		
-		return Server::getInstance()->generateLevel($levelName, $seed, $generatorClass);
+		return Server::getInstance()->getWorldManager()->generateWorld($levelName, $seed, $generatorClass);
 	}
 	
 	public static function isLevelGenerated(string $levelName) : bool {
-		return Server::getInstance()->isLevelGenerated($levelName) && !in_array($levelName, [".", ".."]);
+		return Server::getInstance()->getWorldManager()->isWorldGenerated($levelName) && !in_array($levelName, [".", ".."]);
 	}
 	
 	public static function removeLevel(string $name) : int {
@@ -89,22 +70,22 @@ class WorldManagementAPI {
 			
 			if (count($level->getPlayers()) > 0) {
 				foreach ($level->getPlayers() as $player) {
-					$player->teleport(Server::getInstance()->getDefaultLevel()->getSpawnLocation());
+					$player->teleport(Server::getInstance()->getWorldManager()->getDefaultWorld()->getSpawnLocation());
 				}
 			}
 			
-			$level->getServer()->unloadLevel($level);
+			$level->getServer()->getWorldManager()->unloadWorld($level);
 		}
 		
 		return self::removeDir(Server::getInstance()->getDataPath() . "/worlds/" . $name);
 	}
 	
 	public static function isLevelLoaded(string $levelName) : bool {
-		return Server::getInstance()->isLevelLoaded($levelName);
+		return Server::getInstance()->getWorldManager()->isWorldLoaded($levelName);
 	}
 	
-	public static function getLevel(string $name) : ?Level {
-		return Server::getInstance()->getLevelByName($name);
+	public static function getLevel(string $name) : ?World {
+		return Server::getInstance()->getWorldManager()->getWorldByName($name);
 	}
 	
 	private static function removeDir(string $dirPath) : int {
@@ -143,20 +124,20 @@ class WorldManagementAPI {
 		self::loadLevel($newName);
 		$provider = self::getLevel($newName)->getProvider();
 		
-		if (!$provider instanceof BaseLevelProvider) return;
-		$provider->getLevelData()->setString("LevelName", $newName);
-		$provider->saveLevelData();
+		if (!$provider instanceof BaseWorldProvider) return;
+		$provider->getWorldData()->getCompoundTag()->setString("LevelName", $newName);
+		$provider->getWorldData()->save();
 		
 		self::unloadLevel(self::getLevel($newName));
 		self::loadLevel($newName); // reloading the level
 	}
 	
-	public static function unloadLevel(Level $level) : bool {
-		return $level->getServer()->unloadLevel($level);
+	public static function unloadLevel(World $level) : bool {
+		return $level->getServer()->getWorldManager()->unloadWorld($level);
 	}
 	
 	public static function loadLevel(string $name) : bool {
-		return self::isLevelLoaded($name) ? false : Server::getInstance()->loadLevel($name);
+		return self::isLevelLoaded($name) ? false : Server::getInstance()->getWorldManager()->loadWorld($name);
 	}
 	
 	public static function getAllLevels() : array {

@@ -25,7 +25,8 @@ namespace czechpmdevs\multiworld\command\subcommand;
 use czechpmdevs\multiworld\api\WorldManagementAPI;
 use czechpmdevs\multiworld\util\LanguageManager;
 use pocketmine\command\CommandSender;
-use pocketmine\level\Level;
+use pocketmine\player\Player;
+use pocketmine\world\World;
 
 class InfoSubcommand implements SubCommand {
 	public function executeSub(CommandSender $sender, array $args, string $name) {
@@ -44,15 +45,15 @@ class InfoSubcommand implements SubCommand {
 			$sender->sendMessage($this->getInfoMsg($sender, WorldManagementAPI::getLevel($args[0])));
 			return;
 		}
-		$sender->sendMessage($this->getInfoMsg($sender, $sender->getLevel()));
+		$sender->sendMessage($this->getInfoMsg($sender, $sender->getWorld()));
 	}
 	
-	public function getInfoMsg(CommandSender $sender, Level $level) : string {
-		$name = $level->getName();
+	public function getInfoMsg(CommandSender $sender, World $level) : string {
+		$name = $level->getDisplayName();
 		$folderName = $level->getFolderName();
 		$seed = $level->getSeed();
 		$players = count($level->getPlayers());
-		$generator = $level->getProvider()->getGenerator();
+		$generator = $level->getProvider()->getWorldData()->getGenerator();
 		$time = $level->getTime();
 		
 		$msg = LanguageManager::getMsg($sender, "info", [$name]);

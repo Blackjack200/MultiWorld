@@ -25,10 +25,11 @@ namespace czechpmdevs\multiworld\command\subcommand;
 use czechpmdevs\multiworld\MultiWorld;
 use czechpmdevs\multiworld\util\LanguageManager;
 use pocketmine\command\CommandSender;
-use pocketmine\level\Level;
-use pocketmine\level\Position;
 use pocketmine\math\Vector3;
+use pocketmine\player\Player;
 use pocketmine\Server;
+use pocketmine\world\Position;
+use pocketmine\world\World;
 
 class UpdateSubcommand implements SubCommand {
 	public function executeSub(CommandSender $sender, array $args, string $name) {
@@ -39,9 +40,9 @@ class UpdateSubcommand implements SubCommand {
 		
 		switch (strtolower($args[0])) {
 			case "spawn":
-				if (!isset($args[1]) && ($sender instanceof Player)) {
-					$this->setSpawn($sender->getLevel(), $sender->asVector3());
-					$sender->sendMessage(MultiWorld::getPrefix() . LanguageManager::getMsg($sender, "update-spawn-done", [$sender->getLevel()->getName()]));
+				if (!isset($args[1]) && $sender instanceof Player) {
+					$this->setSpawn($sender->getWorld(), $sender);
+					$sender->sendMessage(MultiWorld::getPrefix() . LanguageManager::getMsg($sender, "update-spawn-done", [$sender->getWorld()->getName()]));
 					break;
 				}
 				
@@ -50,12 +51,12 @@ class UpdateSubcommand implements SubCommand {
 					break;
 				}
 				
-				if (!$this->getServer()->isLevelGenerated($args[1])) {
+				if (!$this->getServer()->getWorldManager()->isWorldGenerated($args[1])) {
 					$sender->sendMessage(MultiWorld::getPrefix() . LanguageManager::getMsg($sender, "update-levelnotexists"));
 					break;
 				}
 				
-				$this->setSpawn($this->getServer()->getLevelByName($args[1]), new Vector3((int) $args[2], (int) $args[3], (int) $args[4]));
+				$this->setSpawn($this->getServer()->getWorldManager()->getWorldByName($args[1]), new Vector3((int) $args[2], (int) $args[3], (int) $args[4]));
 				$sender->sendMessage(MultiWorld::getPrefix() . LanguageManager::getMsg($sender, "update-done"));
 				break;
 			case "lobby":
@@ -64,8 +65,8 @@ class UpdateSubcommand implements SubCommand {
 					$sender->sendMessage(LanguageManager::getMsg($sender, "update-notsupported"));
 					break;
 				}
-				$this->setLobby($sender->asPosition());
-				$sender->sendMessage(MultiWorld::getPrefix() . LanguageManager::getMsg($sender, "update-lobby-done", [$sender->getLevel()->getFolderName()]));
+				$this->setLobby($sender);
+				$sender->sendMessage(MultiWorld::getPrefix() . LanguageManager::getMsg($sender, "update-lobby-done", [$sender->getWorld()->getFolderName()]));
 				break;
 			case "default":
 			case "defaultlevel":
@@ -74,16 +75,16 @@ class UpdateSubcommand implements SubCommand {
 					break;
 				}
 				
-				if (!$this->getServer()->isLevelGenerated($args[1])) {
+				if (!$this->getServer()->getWorldManager()->isWorldGenerated($args[1])) {
 					$sender->sendMessage(MultiWorld::getPrefix() . str_replace("%1", $args[1], LanguageManager::getMsg($sender, "update-levelnotexists")));
 					break;
 				}
 				
-				if (!$this->getServer()->isLevelLoaded($args[1])) {
-					$this->getServer()->loadLevel($args[1]);
+				if (!$this->getServer()->getWorldManager()->isWorldLoaded($args[1])) {
+					$this->getServer()->getWorldManager()->loadWorld($args[1]);
 				}
 				
-				$this->setDefaultLevel($this->getServer()->getLevelByName($args[1]));
+				$this->setDefaultWorld($this->getServer()->getWorldManager()->getWorldByName($args[1]));
 				$sender->sendMessage(MultiWorld::getPrefix() . str_replace("%1", $args[1], LanguageManager::getMsg($sender, "update-default-done")));
 				break;
 			default:
@@ -92,7 +93,7 @@ class UpdateSubcommand implements SubCommand {
 		}
 	}
 	
-	public function setSpawn(Level $level, Vector3 $vector3) {
+	public function setSpawn(World $level, Vector3 $vector3) {
 		$level->setSpawnLocation($vector3);
 	}
 	
@@ -101,11 +102,11 @@ class UpdateSubcommand implements SubCommand {
 	}
 	
 	public function setLobby(Position $position) {
-		$this->setDefaultLevel($position->getLevel());
-		$position->getLevel()->setSpawnLocation($position->asVector3());
+		$this->setDefaultWorld($position->getWorld());
+		$position->getWorld()->setSpawnLocation($position->asVector3());
 	}
 	
-	public function setDefaultLevel(Level $level) {
-		$this->getServer()->setDefaultLevel($level);
+	public function setDefaultWorld(World $level) {
+		$this->getServer()->getWorldManager()->setDefaultWorld($level);
 	}
 }

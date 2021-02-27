@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace czechpmdevs\multiworld\util;
 
-use czechpmdevs\multiworld\api\WorldGameRulesAPI;
 use czechpmdevs\multiworld\api\WorldManagementAPI;
 use czechpmdevs\multiworld\form\CustomForm;
 use czechpmdevs\multiworld\MultiWorld;
@@ -14,20 +13,14 @@ use pocketmine\player\Player;
 class FormManager {
 	public const FORM_CREATE = 0;
 	public const FORM_DELETE = 1;
-	public const FORM_GAMERULES = 2;
 	public const FORM_INFO = 3;
 	public const FORM_LOAD_UNLOAD = 4;
 	public const FORM_TELEPORT = 5;
 	public const FORM_TELEPORT_PLAYER = 6;
 	public const FORM_UPDATE = 7;
 	
-	/** @var MultiWorld $plugin */
-	public $plugin;
-	
-	/**
-	 * FormManager constructor.
-	 * @param MultiWorld $plugin
-	 */
+	public MultiWorld $plugin;
+
 	public function __construct(MultiWorld $plugin) {
 		$this->plugin = $plugin;
 	}
@@ -48,14 +41,6 @@ class FormManager {
 			case self::FORM_DELETE:
 				$customForm->addLabel("Remove world");
 				$customForm->addDropdown("Level name", WorldManagementAPI::getAllLevels());
-				$player->sendForm($customForm);
-				break;
-			case self::FORM_GAMERULES:
-				$customForm->addLabel("Update level GameRules");
-				$rules = WorldGameRulesAPI::getLevelGameRules($player->getLevel());
-				foreach ($rules as $rule => [1 => $value]) {
-					$customForm->addToggle((string) $rule, $value);
-				}
 				$player->sendForm($customForm);
 				break;
 			case self::FORM_INFO:
@@ -131,13 +116,6 @@ class FormManager {
 				break;
 			case self::FORM_DELETE:
 				$this->plugin->getServer()->dispatchCommand($player, "mw delete " . WorldManagementAPI::getAllLevels()[$data[1]]);
-				break;
-			case self::FORM_GAMERULES:
-				array_shift($data);
-				$gameRules = array_keys(WorldGameRulesAPI::getLevelGameRules($player->getLevel()));
-				foreach ($data as $i => $v) {
-					$this->plugin->getServer()->dispatchCommand($player, "gamerule {$gameRules[$i]} " . ((bool) $v ? "true" : "false"));
-				}
 				break;
 			case self::FORM_INFO:
 				$this->plugin->getServer()->dispatchCommand($player, "mw info " . WorldManagementAPI::getAllLevels()[(int) $data[1]]);

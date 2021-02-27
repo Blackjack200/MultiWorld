@@ -22,21 +22,16 @@ declare(strict_types=1);
 
 namespace czechpmdevs\multiworld\generator\void;
 
-use pocketmine\block\Block;
-use pocketmine\level\ChunkManager;
-use pocketmine\level\generator\Generator;
+use pocketmine\block\VanillaBlocks;
 use pocketmine\math\Vector3;
 use pocketmine\utils\Random;
+use pocketmine\world\ChunkManager;
+use pocketmine\world\generator\Generator;
 
 class VoidGenerator extends Generator {
-	protected ChunkManager $level;
-	
-	protected Random $random;
-	
-	private array $options;
-	
-	public function __construct(array $settings = []) {
-		$this->options = $settings;
+	public function __construct(int $seed, array $options = []) {
+		$this->options = $options;
+		parent::__construct($seed, $options);
 	}
 	
 	public function getSettings() : array {
@@ -52,27 +47,27 @@ class VoidGenerator extends Generator {
 		$this->random = $random;
 	}
 	
-	public function generateChunk(int $chunkX, int $chunkZ) : void {
-		$chunk = $this->level->getChunk($chunkX, $chunkZ);
+	public function generateChunk(ChunkManager $world, int $chunkX, int $chunkZ) : void {
+		$chunk = $world->getChunk($chunkX, $chunkZ);
 		for ($x = 0; $x < 16; ++$x) {
 			for ($z = 0; $z < 16; ++$z) {
 				for ($y = 0; $y < 168; ++$y) {
 					$spawn = $this->getSpawn();
 					if ($spawn->getX() >> 4 === $chunkX && $spawn->getZ() >> 4 === $chunkZ) {
-						$chunk->setBlockId(0, 64, 0, Block::GRASS);
+						$chunk->setFullBlock(0, 64, 0, VanillaBlocks::GRASS()->getFullId());
 					} else {
-						$chunk->setBlockId($x, $y, $z, Block::AIR);
+						$chunk->setFullBlock($x, $y, $z, 0);
 					}
 				}
 			}
 		}
-		$chunk->setGenerated(true);
 	}
 	
 	public function getSpawn() : Vector3 {
 		return new Vector3(256, 65, 256);
 	}
 	
-	public function populateChunk(int $chunkX, int $chunkZ) : void {
+	public function populateChunk(ChunkManager $world, int $chunkX, int $chunkZ) : void {
+	
 	}
 }

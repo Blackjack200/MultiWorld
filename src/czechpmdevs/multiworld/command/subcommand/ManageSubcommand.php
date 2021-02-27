@@ -6,6 +6,7 @@ namespace czechpmdevs\multiworld\command\subcommand;
 
 use czechpmdevs\multiworld\form\SimpleForm;
 use pocketmine\command\CommandSender;
+use pocketmine\player\Player;
 
 class ManageSubcommand implements SubCommand {
 	public function executeSub(CommandSender $sender, array $args, string $name) {

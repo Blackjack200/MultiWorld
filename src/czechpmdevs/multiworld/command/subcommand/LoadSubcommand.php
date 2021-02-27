@@ -34,17 +34,17 @@ class LoadSubcommand implements SubCommand {
 			return;
 		}
 		
-		if (!$this->getServer()->isLevelGenerated($args[0])) {
+		if (!$this->getServer()->getWorldManager()->isWorldGenerated($args[0])) {
 			$sender->sendMessage(MultiWorld::getPrefix() . LanguageManager::getMsg($sender, "load-levelnotexists", [$args[0]]));
 			return;
 		}
 		
-		if ($this->getServer()->isLevelLoaded($args[0])) {
+		if ($this->getServer()->getWorldManager()->isWorldLoaded($args[0])) {
 			$sender->sendMessage(MultiWorld::getPrefix() . LanguageManager::getMsg($sender, "load-loaded"));
 			return;
 		}
 		
-		$this->getServer()->loadLevel($args[0]);
+		$this->getServer()->getWorldManager()->loadWorld($args[0]);
 		$sender->sendMessage(MultiWorld::getPrefix() . LanguageManager::getMsg($sender, "load-done"));
 		return;
 	}

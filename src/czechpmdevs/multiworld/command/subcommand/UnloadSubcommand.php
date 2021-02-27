@@ -34,19 +34,18 @@ class UnloadSubcommand implements SubCommand {
 			return;
 		}
 		
-		if (!$this->getServer()->isLevelGenerated($args[0])) {
+		if (!$this->getServer()->getWorldManager()->isWorldGenerated($args[0])) {
 			$sender->sendMessage(MultiWorld::getPrefix() . LanguageManager::getMsg($sender, "unload-levelnotexists", [$args[0]]));
 			return;
 		}
 		
-		if (!$this->getServer()->isLevelLoaded($args[0])) {
+		if (!$this->getServer()->getWorldManager()->isWorldLoaded($args[0])) {
 			$sender->sendMessage(MultiWorld::getPrefix() . LanguageManager::getMsg($sender, "unload-unloaded"));
 			return;
 		}
 		
-		$this->getServer()->unloadLevel($this->getServer()->getLevelByName($args[0]));
+		$this->getServer()->getWorldManager()->unloadWorld($this->getServer()->getWorldManager()->getWorldByName($args[0]));
 		$sender->sendMessage(MultiWorld::getPrefix() . LanguageManager::getMsg($sender, "unload-done"));
-		return;
 	}
 	
 	private function getServer() : Server {

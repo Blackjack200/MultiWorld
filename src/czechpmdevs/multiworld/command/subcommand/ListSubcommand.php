@@ -37,7 +37,7 @@ class ListSubcommand implements SubCommand {
 				$players = 0;
 				
 				if ($isLoaded) {
-					$players = count($this->getServer()->getLevelByName($file)->getPlayers());
+					$players = count($this->getServer()->getWorldManager()->getWorldByName($file)->getPlayers());
 				}
 				
 				$levels[$file] = [$isLoaded, $players];
