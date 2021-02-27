@@ -33,40 +33,40 @@ use pocketmine\Server;
  * @package czechpmdevs\multiworld\command\subcommand
  */
 class DeleteSubcommand implements SubCommand {
-
-    /**
-     * @param CommandSender $sender
-     * @param array $args
-     * @param string $name
-     *
-     * @return mixed|void
-     */
-    public function executeSub(CommandSender $sender, array $args, string $name) {
-        if (!isset($args[0])) {
-            $sender->sendMessage(MultiWorld::getPrefix() . LanguageManager::getMsg($sender, "delete-usage"));
-            return;
-        }
-
-        if (!$this->getServer()->isLevelGenerated($args[0]) || !file_exists($this->getServer()->getDataPath() . "worlds/{$args[0]}")) {
-            $sender->sendMessage(MultiWorld::getPrefix() . str_replace("%1", $args[0], LanguageManager::getMsg($sender, "delete-levelnotexists")));
-            return;
-        }
-
-        if(!$this->getServer()->isLevelLoaded($args[0])) $this->getServer()->loadLevel($args[0]);
-
-        if ($this->getServer()->getDefaultLevel()->getFolderName() == $this->getServer()->getLevelByName($args[0])->getFolderName()) {
-            $sender->sendMessage("§cCould not remove default level!");
-            return;
-        }
-
-        $files = WorldManagementAPI::removeLevel($args[0]);
-        $sender->sendMessage(MultiWorld::getPrefix() . LanguageManager::getMsg($sender, "delete-done", [$files]));
-    }
-
-    /**
-     * @return Server $server
-     */
-    private function getServer(): Server {
-        return Server::getInstance();
-    }
+	
+	/**
+	 * @param CommandSender $sender
+	 * @param array $args
+	 * @param string $name
+	 *
+	 * @return mixed|void
+	 */
+	public function executeSub(CommandSender $sender, array $args, string $name) {
+		if (!isset($args[0])) {
+			$sender->sendMessage(MultiWorld::getPrefix() . LanguageManager::getMsg($sender, "delete-usage"));
+			return;
+		}
+		
+		if (!$this->getServer()->isLevelGenerated($args[0]) || !file_exists($this->getServer()->getDataPath() . "worlds/{$args[0]}")) {
+			$sender->sendMessage(MultiWorld::getPrefix() . str_replace("%1", $args[0], LanguageManager::getMsg($sender, "delete-levelnotexists")));
+			return;
+		}
+		
+		if (!$this->getServer()->isLevelLoaded($args[0])) $this->getServer()->loadLevel($args[0]);
+		
+		if ($this->getServer()->getDefaultLevel()->getFolderName() == $this->getServer()->getLevelByName($args[0])->getFolderName()) {
+			$sender->sendMessage("§cCould not remove default level!");
+			return;
+		}
+		
+		$files = WorldManagementAPI::removeLevel($args[0]);
+		$sender->sendMessage(MultiWorld::getPrefix() . LanguageManager::getMsg($sender, "delete-done", [$files]));
+	}
+	
+	/**
+	 * @return Server $server
+	 */
+	private function getServer() : Server {
+		return Server::getInstance();
+	}
 }

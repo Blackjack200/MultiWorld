@@ -29,15 +29,15 @@ use pocketmine\command\CommandSender;
  * @package czechpmdevs\multiworld\command\subcommand
  */
 interface SubCommand {
-
-    /**
-     * @api
-     *
-     * @param CommandSender $sender
-     * @param array $args
-     * @param string $name
-     *
-     * @return mixed
-     */
-    public function executeSub(CommandSender $sender, array $args, string $name);
+	
+	/**
+	 * @param CommandSender $sender
+	 * @param array $args
+	 * @param string $name
+	 *
+	 * @return mixed
+	 * @api
+	 *
+	 */
+	public function executeSub(CommandSender $sender, array $args, string $name);
 }

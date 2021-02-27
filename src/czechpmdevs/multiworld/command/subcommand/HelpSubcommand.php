@@ -30,56 +30,56 @@ use pocketmine\command\CommandSender;
  * @package czechpmdevs\multiworld\command\subcommand
  */
 class HelpSubcommand implements SubCommand {
-
-    /**
-     * @param CommandSender $sender
-     * @param array $args
-     * @param string $name
-     *
-     * @return mixed|void
-     */
-    public function executeSub(CommandSender $sender, array $args, string $name) {
-        if(!isset($args[0])) {
-            $sender->sendMessage($this->getHelpPage($sender, 1));
-            return;
-        }
-
-        if(!is_numeric($args[0])) {
-            $sender->sendMessage($this->getHelpPage($sender,1));
-            return;
-        }
-
-        $sender->sendMessage($this->getHelpPage($sender, (int)$args[0]));
-    }
-
-    /**
-     * @param CommandSender $sender
-     * @param int $page
-     *
-     * @return string
-     */
-    public function getHelpPage(CommandSender $sender, int $page): string {
-        $title = LanguageManager::getMsg($sender, "help", [$page, "2"]);
-
-        $text = $title;
-
-        switch ($page) {
-            default:
-                $text .= "\n" . LanguageManager::getMsg($sender, "help-1");
-                $text .= "\n" . LanguageManager::getMsg($sender, "help-2");
-                $text .= "\n" . LanguageManager::getMsg($sender, "help-3");
-                $text .= "\n" . LanguageManager::getMsg($sender, "help-4");
-                $text .= "\n" . LanguageManager::getMsg($sender, "help-5");
-                break;
-
-            case 2:
-                $text .= "\n" . LanguageManager::getMsg($sender, "help-6");
-                $text .= "\n" . LanguageManager::getMsg($sender, "help-7");
-                $text .= "\n" . LanguageManager::getMsg($sender, "help-8");
-                $text .= "\n" . LanguageManager::getMsg($sender, "help-9");
-                $text .= "\n" . LanguageManager::getMsg($sender, "help-10");
-                break;
-        }
-        return $text;
-    }
+	
+	/**
+	 * @param CommandSender $sender
+	 * @param array $args
+	 * @param string $name
+	 *
+	 * @return mixed|void
+	 */
+	public function executeSub(CommandSender $sender, array $args, string $name) {
+		if (!isset($args[0])) {
+			$sender->sendMessage($this->getHelpPage($sender, 1));
+			return;
+		}
+		
+		if (!is_numeric($args[0])) {
+			$sender->sendMessage($this->getHelpPage($sender, 1));
+			return;
+		}
+		
+		$sender->sendMessage($this->getHelpPage($sender, (int) $args[0]));
+	}
+	
+	/**
+	 * @param CommandSender $sender
+	 * @param int $page
+	 *
+	 * @return string
+	 */
+	public function getHelpPage(CommandSender $sender, int $page) : string {
+		$title = LanguageManager::getMsg($sender, "help", [$page, "2"]);
+		
+		$text = $title;
+		
+		switch ($page) {
+			default:
+				$text .= "\n" . LanguageManager::getMsg($sender, "help-1");
+				$text .= "\n" . LanguageManager::getMsg($sender, "help-2");
+				$text .= "\n" . LanguageManager::getMsg($sender, "help-3");
+				$text .= "\n" . LanguageManager::getMsg($sender, "help-4");
+				$text .= "\n" . LanguageManager::getMsg($sender, "help-5");
+				break;
+			
+			case 2:
+				$text .= "\n" . LanguageManager::getMsg($sender, "help-6");
+				$text .= "\n" . LanguageManager::getMsg($sender, "help-7");
+				$text .= "\n" . LanguageManager::getMsg($sender, "help-8");
+				$text .= "\n" . LanguageManager::getMsg($sender, "help-9");
+				$text .= "\n" . LanguageManager::getMsg($sender, "help-10");
+				break;
+		}
+		return $text;
+	}
 }

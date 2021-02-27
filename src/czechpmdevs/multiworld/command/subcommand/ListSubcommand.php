@@ -32,43 +32,42 @@ use pocketmine\Server;
  * @package czechpmdevs\multiworld\command\subcommand
  */
 class ListSubcommand implements SubCommand {
-
-    /**
-     * @param CommandSender $sender
-     * @param array $args
-     * @param string $name
-     * @return mixed|void
-     */
-    public function executeSub(CommandSender $sender, array $args, string $name) {
-        $levels = [];
-
-        foreach (scandir($this->getServer()->getDataPath()."worlds") as $file) {
-            if(WorldManagementAPI::isLevelGenerated($file)) {
-                $isLoaded = WorldManagementAPI::isLevelLoaded($file);
-                $players = 0;
-
-                if($isLoaded) {
-                    $players = count($this->getServer()->getLevelByName($file)->getPlayers());
-                }
-
-                $levels[$file] = [$isLoaded, $players];
-            }
-        }
-
-
-
-        $sender->sendMessage(LanguageManager::getMsg($sender, "list-done", [(string) count($levels)]));
-
-        foreach ($levels as $level => [$loaded, $players]) {
-            $loaded = $loaded ? "§aloaded§7" : "§cunloaded§7";
-            $sender->sendMessage("§7{$level} > {$loaded} §7players: {$players}");
-        }
-    }
-
-    /**
-     * @return Server $server
-     */
-    private function getServer(): Server {
-        return Server::getInstance();
-    }
+	
+	/**
+	 * @param CommandSender $sender
+	 * @param array $args
+	 * @param string $name
+	 * @return mixed|void
+	 */
+	public function executeSub(CommandSender $sender, array $args, string $name) {
+		$levels = [];
+		
+		foreach (scandir($this->getServer()->getDataPath() . "worlds") as $file) {
+			if (WorldManagementAPI::isLevelGenerated($file)) {
+				$isLoaded = WorldManagementAPI::isLevelLoaded($file);
+				$players = 0;
+				
+				if ($isLoaded) {
+					$players = count($this->getServer()->getLevelByName($file)->getPlayers());
+				}
+				
+				$levels[$file] = [$isLoaded, $players];
+			}
+		}
+		
+		
+		$sender->sendMessage(LanguageManager::getMsg($sender, "list-done", [(string) count($levels)]));
+		
+		foreach ($levels as $level => [$loaded, $players]) {
+			$loaded = $loaded ? "§aloaded§7" : "§cunloaded§7";
+			$sender->sendMessage("§7{$level} > {$loaded} §7players: {$players}");
+		}
+	}
+	
+	/**
+	 * @return Server $server
+	 */
+	private function getServer() : Server {
+		return Server::getInstance();
+	}
 }

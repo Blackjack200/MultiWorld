@@ -29,43 +29,43 @@ use czechpmdevs\multiworld\generator\normal\populator\Populator;
  * @package czechpmdevs\multiworld\generator\normal\biome
  */
 abstract class Biome extends \pocketmine\level\biome\Biome {
-
-    /** @var bool $isFrozen */
-    private $isFrozen = false;
-
-    /**
-     * Biome constructor.
-     *
-     * @param float $temperature
-     * @param float $rainfall
-     */
-    public function __construct(float $temperature, float $rainfall) {
-        $this->temperature = $temperature;
-        $this->rainfall = $rainfall;
-
-        $this->isFrozen = ($temperature <= 0);
-    }
-
-    /**
-     * @return bool
-     */
-    public function isFrozen(): bool {
-        return $this->isFrozen;
-    }
-
-    /**
-     * @param bool $isFrozen
-     */
-    public function setFrozen(bool $isFrozen = true): void {
-        $this->isFrozen = $isFrozen;
-    }
-
-    /**
-     * @param Populator[] $populators
-     */
-    public function addPopulators(array $populators = []) {
-        foreach ($populators as $populator) {
-            $this->addPopulator($populator);
-        }
-    }
+	
+	/** @var bool $isFrozen */
+	private $isFrozen = false;
+	
+	/**
+	 * Biome constructor.
+	 *
+	 * @param float $temperature
+	 * @param float $rainfall
+	 */
+	public function __construct(float $temperature, float $rainfall) {
+		$this->temperature = $temperature;
+		$this->rainfall = $rainfall;
+		
+		$this->isFrozen = ($temperature <= 0);
+	}
+	
+	/**
+	 * @return bool
+	 */
+	public function isFrozen() : bool {
+		return $this->isFrozen;
+	}
+	
+	/**
+	 * @param bool $isFrozen
+	 */
+	public function setFrozen(bool $isFrozen = true) : void {
+		$this->isFrozen = $isFrozen;
+	}
+	
+	/**
+	 * @param Populator[] $populators
+	 */
+	public function addPopulators(array $populators = []) {
+		foreach ($populators as $populator) {
+			$this->addPopulator($populator);
+		}
+	}
 }

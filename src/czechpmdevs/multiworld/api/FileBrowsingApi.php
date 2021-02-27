@@ -23,107 +23,108 @@ declare(strict_types=1);
 
 namespace czechpmdevs\multiworld\api;
 
+use Generator;
+
 /**
  * Class FileBrowsingApi
  * @package czechpmdevs\multiworld\api
  */
 class FileBrowsingApi {
-
-    /**
-     * @api
-     *
-     * Returns all subdirectories in the path
-     *
-     * @param string $dir
-     * @return array
-     */
-    public static function getAllSubdirectories(string $dir): array {
-        $scanDirectory = function (string $dir): \Generator {
-            foreach (glob($dir . "/*") as $subDir) {
-                if(is_dir($subDir)) {
-                    yield $subDir;
-                }
-            }
-        };
-
-        $all = [];
-        $toCheck = [$dir => 0];
-
-        check:
-        foreach (array_keys($toCheck) as $scanning) {
-            foreach ($scanDirectory($scanning) as $subDirectory) {
-                if(!in_array($subDirectory, $all)) {
-                    $all[] = $subDirectory;
-                    $toCheck[$subDirectory] = 0;
-                }
-            }
-
-            unset($toCheck[$scanning]);
-        }
-
-        if(!empty($toCheck)) {
-            goto check;
-        }
-
-        return $all;
-    }
-
-    /**
-     * @api
-     *
-     * Saves resources with subdirectories
-     *
-     * @param string $sourceFile
-     * @param string $targetFile
-     * @param bool $rewrite
-     *
-     * @return bool $isChanged
-     */
-    public static function saveResource(string $sourceFile, string $targetFile, bool $rewrite = false): bool {
-        if(file_exists($targetFile)) {
-            if($rewrite) {
-                unlink($targetFile);
-            }
-            else {
-                return false;
-            }
-        }
-
-        $dirs = explode(DIRECTORY_SEPARATOR, $targetFile);
-        $file = array_pop($dirs);
-
-        $tested = "";
-        foreach ($dirs as $dir) {
-            $tested .= $dir . DIRECTORY_SEPARATOR;
-            if(!file_exists($tested)) {
-                @mkdir($tested);
-            }
-        }
-
-        file_put_contents($targetFile, file_get_contents($sourceFile));
-        return true;
-    }
-
-
-    /**
-     * @api
-     *
-     * Example:
-     * $path = 'D:\JetBrains\PhpstormProjects\ProjectCzechPMDevs\plugins\MultiWorld/resources/structures/village/snowy/houses';
-     * $root = 'resources'
-     * -> '/structures/village/snowy/houses'
-     *
-     * @param string $path
-     * @param string $root
-     *
-     * @return string
-     */
-    public static function removePathFromRoot(string $path, string $root): string {
-        $position = strpos($path, $root);
-        if($position === false) {
-            return $path;
-        }
-
-        return substr($path, $position + strlen($root));
-    }
+	
+	/**
+	 * @param string $dir
+	 * @return array
+	 * @api
+	 *
+	 * Returns all subdirectories in the path
+	 *
+	 */
+	public static function getAllSubdirectories(string $dir) : array {
+		$scanDirectory = function (string $dir) : Generator {
+			foreach (glob($dir . "/*") as $subDir) {
+				if (is_dir($subDir)) {
+					yield $subDir;
+				}
+			}
+		};
+		
+		$all = [];
+		$toCheck = [$dir => 0];
+		
+		check:
+		foreach (array_keys($toCheck) as $scanning) {
+			foreach ($scanDirectory($scanning) as $subDirectory) {
+				if (!in_array($subDirectory, $all)) {
+					$all[] = $subDirectory;
+					$toCheck[$subDirectory] = 0;
+				}
+			}
+			
+			unset($toCheck[$scanning]);
+		}
+		
+		if (!empty($toCheck)) {
+			goto check;
+		}
+		
+		return $all;
+	}
+	
+	/**
+	 * @param string $sourceFile
+	 * @param string $targetFile
+	 * @param bool $rewrite
+	 *
+	 * @return bool $isChanged
+	 * @api
+	 *
+	 * Saves resources with subdirectories
+	 *
+	 */
+	public static function saveResource(string $sourceFile, string $targetFile, bool $rewrite = false) : bool {
+		if (file_exists($targetFile)) {
+			if ($rewrite) {
+				unlink($targetFile);
+			} else {
+				return false;
+			}
+		}
+		
+		$dirs = explode(DIRECTORY_SEPARATOR, $targetFile);
+		$file = array_pop($dirs);
+		
+		$tested = "";
+		foreach ($dirs as $dir) {
+			$tested .= $dir . DIRECTORY_SEPARATOR;
+			if (!file_exists($tested)) {
+				@mkdir($tested);
+			}
+		}
+		
+		file_put_contents($targetFile, file_get_contents($sourceFile));
+		return true;
+	}
+	
+	
+	/**
+	 * @param string $path
+	 * @param string $root
+	 *
+	 * @return string
+	 * @api
+	 *
+	 * Example:
+	 * $path = 'D:\JetBrains\PhpstormProjects\ProjectCzechPMDevs\plugins\MultiWorld/resources/structures/village/snowy/houses';
+	 * $root = 'resources'
+	 * -> '/structures/village/snowy/houses'
+	 *
+	 */
+	public static function removePathFromRoot(string $path, string $root) : string {
+		$position = strpos($path, $root);
+		if ($position === false) {
+			return $path;
+		}
+		
+		return substr($path, $position + strlen($root));
+	}
 }

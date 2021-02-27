@@ -32,38 +32,38 @@ use pocketmine\Server;
  * @package czechpmdevs\multiworld\command\subcommand
  */
 class LoadSubcommand implements SubCommand {
-
-    /**
-     * @param CommandSender $sender
-     * @param array $args
-     * @param string $name
-     * @return mixed|void
-     */
-    public function executeSub(CommandSender $sender, array $args, string $name) {
-        if (!isset($args[0])) {
-            $sender->sendMessage(LanguageManager::getMsg($sender, "load-usage"));
-            return;
-        }
-
-        if(!$this->getServer()->isLevelGenerated($args[0])) {
-            $sender->sendMessage(MultiWorld::getPrefix() . LanguageManager::getMsg($sender, "load-levelnotexists", [$args[0]]));
-            return;
-        }
-
-        if($this->getServer()->isLevelLoaded($args[0])) {
-            $sender->sendMessage(MultiWorld::getPrefix() . LanguageManager::getMsg($sender, "load-loaded"));
-            return;
-        }
-
-        $this->getServer()->loadLevel($args[0]);
-        $sender->sendMessage(MultiWorld::getPrefix() . LanguageManager::getMsg($sender, "load-done"));
-        return;
-    }
-
-    /**
-     * @return Server $server
-     */
-    private function getServer(): Server {
-        return Server::getInstance();
-    }
+	
+	/**
+	 * @param CommandSender $sender
+	 * @param array $args
+	 * @param string $name
+	 * @return mixed|void
+	 */
+	public function executeSub(CommandSender $sender, array $args, string $name) {
+		if (!isset($args[0])) {
+			$sender->sendMessage(LanguageManager::getMsg($sender, "load-usage"));
+			return;
+		}
+		
+		if (!$this->getServer()->isLevelGenerated($args[0])) {
+			$sender->sendMessage(MultiWorld::getPrefix() . LanguageManager::getMsg($sender, "load-levelnotexists", [$args[0]]));
+			return;
+		}
+		
+		if ($this->getServer()->isLevelLoaded($args[0])) {
+			$sender->sendMessage(MultiWorld::getPrefix() . LanguageManager::getMsg($sender, "load-loaded"));
+			return;
+		}
+		
+		$this->getServer()->loadLevel($args[0]);
+		$sender->sendMessage(MultiWorld::getPrefix() . LanguageManager::getMsg($sender, "load-done"));
+		return;
+	}
+	
+	/**
+	 * @return Server $server
+	 */
+	private function getServer() : Server {
+		return Server::getInstance();
+	}
 }
